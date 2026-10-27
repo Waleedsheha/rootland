@@ -456,6 +456,8 @@ export const en = {
   'footer.contactTitle': 'Contact',
   'footer.status': 'Delivery across all Egypt',
   'footer.backToTop': 'Back to top',
+  'footer.siteBy': 'Site by',
+  'footer.siteByPerson': 'Dr. Waleed Sheha',
   'hero.aria': 'RootLand hoodies',
   'hero.scroll': 'Scroll',
   'home.twoTitle': 'Two hoodies,',

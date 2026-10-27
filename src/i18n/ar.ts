@@ -456,6 +456,8 @@ export const ar = {
   'footer.contactTitle': 'تواصل',
   'footer.status': 'توصيل لكل مصر',
   'footer.backToTop': 'إلى الأعلى',
+  'footer.siteBy': 'تصميم وتطوير',
+  'footer.siteByPerson': 'د. وليد شيحة',
   'hero.aria': 'هوديز روت لاند',
   'hero.scroll': 'مرّر',
   'home.twoTitle': 'اتنين هودي أبيض وأسود،',

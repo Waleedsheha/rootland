@@ -220,6 +220,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenSizeGuide, onO
             {t('footer.backToTop')} ↑
           </button>
         </div>
+        <p className="mt-4 flex flex-wrap justify-center items-center gap-x-4 gap-y-1 t-label text-mut">
+          <span>
+            {t('footer.siteBy')}{' '}
+            <a href="https://syvursoft.com" target="_blank" rel="noopener noreferrer" lang="en" className={linkClass}>
+              Syvursoft ↗
+            </a>
+          </span>
+          <span aria-hidden="true">·</span>
+          <span>{t('footer.siteByPerson')}</span>
+        </p>
       </div>
     </footer>
   );
