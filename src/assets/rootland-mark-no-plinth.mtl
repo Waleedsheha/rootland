@@ -1,0 +1,13 @@
+# Exported by three-d-stage
+newmtl cream
+Kd 0.9131 0.8796 0.8228
+Ks 0.2000 0.2000 0.2000
+Ns 90
+d 1.0000
+
+newmtl copper
+Kd 0.4621 0.1301 0.0123
+Ks 0.2000 0.2000 0.2000
+Ns 130
+d 1.0000
+

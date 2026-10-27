@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /account
+Disallow: /checkout
+
+Sitemap: https://rootland.store/sitemap.xml

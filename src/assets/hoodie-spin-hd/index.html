@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoodie 360</title>
+<style>
+  :root { --bg: #e6e6e6; --text: #1a1a1a; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; }
+  .viewer { width: min(92vw, 420px); padding: 16px; box-sizing: border-box; }
+  .viewer img { display: block; width: 100%; height: auto; }
+  .viewer input { display: block; width: 100%; margin: 16px 0; }
+  .colors { display: flex; gap: 8px; justify-content: center; }
+  .colors button { min-width: 88px; min-height: 44px; border: 1px solid var(--text); border-radius: 22px; background: transparent; color: var(--text); font: inherit; cursor: pointer; }
+  .colors button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
+</style>
+</head>
+<body>
+<main class="viewer">
+  <img id="hoodie" src="frames/black/001.webp" width="1529" height="2048" alt="Hoodie">
+  <input id="spin" type="range" min="1" max="90" value="1" aria-label="Spin the hoodie">
+  <div class="colors">
+    <button type="button" data-color="black" aria-pressed="true">Black</button>
+    <button type="button" data-color="white" aria-pressed="false">White</button>
+  </div>
+</main>
+<script>
+  const FRAMES = 90;
+  const img = document.getElementById('hoodie');
+  const slider = document.getElementById('spin');
+  const buttons = document.querySelectorAll('.colors button');
+  const loaded = {};
+  let color = 'black';
+
+  const frameSrc = (c, n) => `frames/${c}/${String(n).padStart(3, '0')}.webp`;
+
+  // Load all frames of a color once, so the slider turns without waiting
+  function preload(c) {
+    if (loaded[c]) return;
+    loaded[c] = [];
+    for (let n = 1; n <= FRAMES; n++) {
+      const im = new Image();
+      im.src = frameSrc(c, n);
+      loaded[c].push(im);
+    }
+  }
+
+  function show() {
+    img.src = frameSrc(color, slider.value);
+  }
+
+  slider.addEventListener('input', show);
+  buttons.forEach(b => b.addEventListener('click', () => {
+    color = b.dataset.color;
+    buttons.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    preload(color);
+    show();
+  }));
+  preload('black');
+</script>
+</body>
+</html>

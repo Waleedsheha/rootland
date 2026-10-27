@@ -1,0 +1,797 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "./styles/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/*
+  RootLand design system — night / bone / clay.
+  Two surfaces only. Every band declares data-surface="night" | "bone" and the
+  semantic tokens below (bg, fg, mut, line, accent …) flip with it, so a
+  component reads correctly on whichever surface it sits on.
+*/
+
+/* Inline so utilities read the variables where they are used (per surface / per language). */
+@theme inline {
+  /* Brand faces only. No generic or system families anywhere. */
+  --font-*: initial;
+  --font-sans: var(--rl-font-body);
+  --font-display: var(--rl-font-display);
+  --font-mono: var(--rl-font-num);
+
+  /* Surface-driven semantic colours */
+  --color-bg: var(--s-bg);
+  --color-bg-2: var(--s-bg-2);
+  --color-fg: var(--s-fg);
+  --color-body: var(--s-body);
+  --color-mut: var(--s-mut);
+  --color-line: var(--s-line);
+  --color-line-strong: var(--s-line-strong);
+  --color-accent: var(--s-accent);
+  --color-ghost-ink: var(--s-ghost);
+  --color-ok: var(--s-ok);
+  --color-err: var(--s-err);
+  --color-warn: var(--s-warn);
+}
+
+@theme {
+  /* Fixed brand colours */
+  --color-night: #0c0c0c;
+  --color-night-2: #151515;
+  --color-ghost: #242422;
+  --color-bone: #d8d8d4;
+  --color-bone-2: #c8c8c3;
+  --color-clay: #c8642a;
+  --color-clay-ink: #8a3f14;
+
+  /* One easing curve, three durations */
+  --ease-rl: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-out-rl: cubic-bezier(0.16, 1, 0.3, 1);
+  --default-transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1);
+  --default-transition-duration: 300ms;
+}
+
+@layer base {
+  html {
+    --rl-font-body: 'Switzer';
+    --rl-font-display: 'Switzer';
+    --rl-font-num: 'Switzer';
+    --gutter: clamp(20px, 4vw, 72px);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html[lang='ar'],
+  [lang='ar'] {
+    --rl-font-body: 'Readex Pro';
+    --rl-font-display: 'Readex Pro';
+    --rl-font-num: 'Readex Pro';
+  }
+
+  [lang='en'] {
+    --rl-font-body: 'Switzer';
+    --rl-font-display: 'Switzer';
+    --rl-font-num: 'Switzer';
+  }
+
+  [lang] {
+    font-family: var(--rl-font-body);
+  }
+
+  :root,
+  [data-surface='night'] {
+    --s-bg: #0c0c0c;
+    --s-bg-2: #151515;
+    --s-fg: #d8d8d4;
+    --s-body: #b8b8b2;
+    --s-mut: #7b7b76;
+    --s-line: rgba(216, 216, 212, 0.15);
+    --s-line-strong: rgba(216, 216, 212, 0.32);
+    --s-accent: #c8642a;
+    --s-ghost: #242422;
+    --s-ok: #5fd08f;
+    --s-err: #ff7a6b;
+    --s-warn: #e8b04a;
+    --s-pill-hover-bg: #c8642a;
+    --s-pill-hover-fg: #0c0c0c;
+    color-scheme: dark;
+  }
+
+  [data-surface='bone'] {
+    --s-bg: #d8d8d4;
+    --s-bg-2: #e4e4e0;
+    --s-fg: #0c0c0c;
+    --s-body: #3a3a36;
+    --s-mut: #55554f;
+    --s-line: rgba(12, 12, 12, 0.22);
+    --s-line-strong: rgba(12, 12, 12, 0.38);
+    --s-accent: #8a3f14;
+    --s-ghost: #bdbdb8;
+    --s-ok: #1a6640;
+    --s-err: #b42318;
+    --s-warn: #7a4f00;
+    --s-pill-hover-bg: #0c0c0c;
+    --s-pill-hover-fg: #d8d8d4;
+    color-scheme: light;
+  }
+
+  [data-surface] {
+    background-color: var(--s-bg);
+    color: var(--s-fg);
+  }
+
+  body {
+    min-height: 100svh;
+    font-size: 16px;
+    line-height: 24px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html[lang='ar'] body {
+    line-height: 28px;
+  }
+
+  html,
+  body {
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  ::selection {
+    background: #c8642a;
+    color: #0c0c0c;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--s-accent);
+    outline-offset: 3px;
+  }
+
+  input,
+  textarea,
+  select {
+    color: inherit;
+  }
+
+  ::placeholder {
+    color: var(--s-mut);
+    opacity: 1;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0c0c0c;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #242422;
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c8642a;
+  }
+
+  /* Lenis */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  /* Custom cursor hides the native one on fine pointers only. */
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+  html.has-cursor input,
+  html.has-cursor textarea,
+  html.has-cursor select {
+    cursor: text !important;
+  }
+}
+
+@layer components {
+  /* ---------- Type scale (Latin) + Arabic overrides via :lang(ar) ---------- */
+  .t-hero {
+    font-family: var(--rl-font-display);
+    font-size: clamp(44px, 9vw, 168px);
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+  .t-section {
+    font-family: var(--rl-font-display);
+    font-size: clamp(40px, 5.8vw, 92px);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  .t-statement {
+    font-family: var(--rl-font-display);
+    font-size: clamp(30px, 4.6vw, 74px);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+  }
+  .t-title {
+    font-family: var(--rl-font-display);
+    font-size: clamp(28px, 3.4vw, 52px);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  .t-row {
+    font-family: var(--rl-font-display);
+    font-size: clamp(22px, 3vw, 44px);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  .t-marquee {
+    font-family: var(--rl-font-display);
+    font-size: clamp(26px, 3.6vw, 56px);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .t-stat {
+    font-family: var(--rl-font-display);
+    font-size: clamp(36px, 4.6vw, 70px);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  .t-giant {
+    font-family: var(--rl-font-display);
+    font-size: clamp(56px, 17vw, 300px);
+    font-weight: 600;
+    line-height: 0.82;
+    letter-spacing: -0.055em;
+    text-transform: uppercase;
+  }
+  .t-blurb {
+    font-size: clamp(14px, 1.1vw, 17px);
+    line-height: 1.55;
+  }
+  .t-label {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .t-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  /* Phones: lift the micro type a step so it stays legible. */
+  @media (max-width: 639px) {
+    .t-label {
+      font-size: 12px;
+    }
+    .t-tag {
+      font-size: 11px;
+    }
+  }
+  .t-counter {
+    font-family: var(--rl-font-num);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+  .t-button {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .t-hero:lang(ar),
+  .t-section:lang(ar),
+  .t-statement:lang(ar),
+  .t-title:lang(ar),
+  .t-row:lang(ar),
+  .t-marquee:lang(ar),
+  .t-giant:lang(ar) {
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .t-hero:lang(ar) {
+    font-size: clamp(44px, 8.6vw, 150px);
+    line-height: 1.18;
+  }
+  .t-section:lang(ar) {
+    line-height: 1.25;
+  }
+  .t-statement:lang(ar) {
+    line-height: 1.45;
+  }
+  .t-title:lang(ar),
+  .t-row:lang(ar) {
+    line-height: 1.3;
+  }
+  .t-marquee:lang(ar) {
+    line-height: 1.3;
+  }
+  .t-giant:lang(ar) {
+    line-height: 1.15;
+  }
+  .t-blurb:lang(ar) {
+    line-height: 1.85;
+  }
+  .t-label:lang(ar),
+  .t-tag:lang(ar) {
+    font-size: 12px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .t-button:lang(ar) {
+    font-family: var(--rl-font-display);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* ---------- Layout ---------- */
+  .gutter {
+    padding-inline: var(--gutter);
+  }
+  .section {
+    padding-block: clamp(60px, 10vh, 110px);
+  }
+  .section-lg {
+    padding-block: clamp(70px, 12vh, 150px);
+  }
+  .hairline {
+    border-top: 1px solid var(--s-line);
+  }
+  /* Clears the fixed header on pages that start with ordinary content. */
+  .page-top {
+    padding-top: clamp(112px, 16vh, 150px);
+  }
+
+  /* ---------- Pill buttons ---------- */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 28px;
+    border: 1px solid var(--s-line-strong);
+    border-radius: 999px;
+    color: var(--s-fg);
+    background: transparent;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      background-color 0.3s var(--ease-rl),
+      border-color 0.3s var(--ease-rl),
+      color 0.3s var(--ease-rl),
+      opacity 0.3s var(--ease-rl);
+    cursor: pointer;
+  }
+  .pill:lang(ar) {
+    font-family: var(--rl-font-display);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .pill:hover:not(:disabled),
+  .pill[aria-expanded='true'] {
+    background: var(--s-pill-hover-bg);
+    border-color: var(--s-pill-hover-bg);
+    color: var(--s-pill-hover-fg);
+  }
+  .pill:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .pill--sm {
+    padding: 11px 20px;
+  }
+  /* Touch screens: small pills still get a full-size target. */
+  @media (pointer: coarse) {
+    .pill--sm {
+      min-height: 44px;
+    }
+  }
+  /* Narrow phones: logo, bag and menu must share 360px. */
+  @media (max-width: 399px) {
+    .pill--sm {
+      padding-inline: 14px;
+    }
+  }
+  .pill--solid {
+    background: var(--s-fg);
+    border-color: var(--s-fg);
+    color: var(--s-bg);
+  }
+  .pill--accent {
+    background: var(--s-accent);
+    border-color: var(--s-accent);
+    color: #0c0c0c;
+  }
+  [data-surface='bone'] .pill--accent,
+  .pill--accent[data-surface='bone'] {
+    color: #d8d8d4;
+  }
+  .pill--block {
+    width: 100%;
+  }
+
+  /* ---------- Popups: sign in, bag, size guide, search, fit tool ---------- */
+  .field-line {
+    caret-color: var(--color-clay);
+  }
+  /* Browser autofill keeps the field's own surface and ink instead of its yellow wash. */
+  .field-line:-webkit-autofill,
+  .field-line:-webkit-autofill:hover,
+  .field-line:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--s-fg);
+    -webkit-box-shadow: 0 0 0 1000px var(--s-bg) inset;
+    caret-color: var(--color-clay);
+  }
+  /* Number fields show big numerals only, without the browser's spin arrows. */
+  .field-line[type='number'] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  .field-line[type='number']::-webkit-outer-spin-button,
+  .field-line[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  /* The search box: no browser clear button, the popup draws its own. */
+  .field-line[type='search']::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+  @keyframes popup-panel-in {
+    from {
+      transform: translateY(16px);
+      clip-path: inset(0 0 9% 0);
+    }
+    to {
+      transform: none;
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  /* Fades the colour, not the layer's opacity: a finished opacity animation can stay stuck transparent in some browsers. */
+  @keyframes popup-scrim-in {
+    from {
+      background-color: transparent;
+    }
+  }
+  .popup-panel {
+    animation: popup-panel-in 0.75s var(--ease-out-rl) both;
+  }
+  .popup-scrim {
+    animation: popup-scrim-in 0.45s var(--ease-out-rl) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .popup-panel,
+    .popup-scrim {
+      animation: none;
+    }
+  }
+
+  .pill .pill__count {
+    color: var(--s-accent);
+    transition: color 0.3s var(--ease-rl);
+  }
+  .pill:hover .pill__count {
+    color: inherit;
+  }
+
+  /* ---------- Fields (underline style) ---------- */
+  .field {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--s-line-strong);
+    padding: 12px 0;
+    font-size: 16px;
+    color: var(--s-fg);
+    border-radius: 0;
+    transition: border-color 0.3s var(--ease-rl);
+  }
+  .field:focus {
+    outline: none;
+    border-bottom-color: var(--s-accent);
+  }
+  .field--boxed {
+    border: 1px solid var(--s-line-strong);
+    padding: 12px 14px;
+  }
+
+  /* ---------- Reveal masks ---------- */
+  .mask-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+  .mask-line:lang(ar) {
+    padding-bottom: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  /* ---------- Marquee ---------- */
+  .marquee {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee__track {
+    display: inline-flex;
+    width: max-content;
+    animation: rl-marquee 26s linear infinite;
+  }
+  [dir='rtl'] .marquee__track {
+    animation-name: rl-marquee-rtl;
+  }
+
+  /* ---------- Overlays ---------- */
+  .grain {
+    position: fixed;
+    inset: -60%;
+    z-index: 150;
+    pointer-events: none;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation: rl-grain 1.2s steps(4) infinite;
+  }
+
+  /*
+    The RootLand icon as the pointer. The stem layer blends by difference (white
+    inverts what is beneath, black leaves it as is); the clay bar rides a normal
+    layer above it. Hover grows an inverting disc the icon cuts out of; "View"
+    grows it further and shows the label, cut out the same way.
+  */
+  .cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 160;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    color: #ffffff;
+    mix-blend-mode: difference;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cursor-dot--bar {
+    z-index: 161;
+    mix-blend-mode: normal;
+  }
+  .cursor-dot__disc {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 999px;
+    background: #ffffff;
+    transform: translate(-50%, -50%);
+    transition:
+      width 0.45s var(--ease-rl),
+      height 0.45s var(--ease-rl);
+  }
+  .cursor-dot[data-state='hover'] .cursor-dot__disc {
+    width: 72px;
+    height: 72px;
+  }
+  .cursor-dot[data-state='view'] .cursor-dot__disc {
+    width: 120px;
+    height: 120px;
+  }
+  .cursor-dot__icon {
+    position: relative;
+    transition:
+      transform 0.45s var(--ease-rl),
+      opacity 0.3s var(--ease-rl),
+      color 0.3s var(--ease-rl);
+  }
+  .cursor-dot[data-state='hover'] .cursor-dot__icon {
+    transform: scale(1.5);
+    color: #000000;
+  }
+  .cursor-dot[data-state='view'] .cursor-dot__icon {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  .cursor-dot__label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #000000;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-rl);
+  }
+  .cursor-dot[data-state='view'] .cursor-dot__label {
+    opacity: 1;
+  }
+
+  /* Fill rows: while the clay layer is up, every token inside reads as night ink. */
+  .fill-row {
+    transition: color 0.3s var(--ease-rl);
+  }
+  .fill-row[data-filled='true'] {
+    --s-fg: #0c0c0c;
+    --s-mut: #0c0c0c;
+    --s-body: #0c0c0c;
+    --s-accent: #0c0c0c;
+    --s-ghost: #0c0c0c;
+    color: #0c0c0c;
+  }
+
+  /* Dot that blinks (status) */
+  .blink {
+    animation: rl-blink 1.6s steps(2) infinite;
+  }
+
+  /* ---------- Admin console ---------- */
+  /* An operating screen: sentence-case buttons at reading size instead of the storefront's tracked capitals. */
+  [data-admin] .pill {
+    gap: 8px;
+    padding: 13px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    text-transform: none;
+  }
+  [data-admin] .pill--sm {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+  [data-admin] .pill--solid:hover:not(:disabled) {
+    background: #2b2b29;
+    border-color: #2b2b29;
+  }
+  [data-admin] .pill--danger {
+    color: var(--s-err);
+    border-color: color-mix(in srgb, var(--s-err) 45%, transparent);
+  }
+  [data-admin] .pill--danger:hover:not(:disabled) {
+    background: var(--s-err);
+    border-color: var(--s-err);
+    color: #f4f4f1;
+  }
+  /* Native selects keep their behaviour but draw the admin's own chevron. */
+  .admin-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2355554f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px 16px;
+  }
+  [data-admin] input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  [data-admin] input,
+  [data-admin] textarea {
+    caret-color: var(--color-clay);
+  }
+  [data-admin] input:-webkit-autofill,
+  [data-admin] input:-webkit-autofill:hover,
+  [data-admin] input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--s-fg);
+    -webkit-box-shadow: 0 0 0 1000px #efefeb inset;
+  }
+  /* Scrollbars inside the bone console (tables, the order panel) and the page itself follow the bone surface. */
+  [data-admin] ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  [data-admin] ::-webkit-scrollbar-thumb {
+    background: rgba(12, 12, 12, 0.22);
+  }
+  [data-admin] ::-webkit-scrollbar-thumb:hover {
+    background: #8a3f14;
+  }
+  [data-admin] [data-surface='night'] ::-webkit-scrollbar-thumb {
+    background: #242422;
+  }
+  html:has([data-admin])::-webkit-scrollbar-track {
+    background: #d8d8d4;
+  }
+  html:has([data-admin])::-webkit-scrollbar-thumb {
+    background: rgba(12, 12, 12, 0.28);
+  }
+  html:has([data-admin])::-webkit-scrollbar-thumb:hover {
+    background: #8a3f14;
+  }
+}
+
+@keyframes rl-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes rl-marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
+  }
+}
+@keyframes rl-grain {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-3%, 2%);
+  }
+  50% {
+    transform: translate(2%, -4%);
+  }
+  75% {
+    transform: translate(-4%, -2%);
+  }
+  100% {
+    transform: translate(3%, 3%);
+  }
+}
+@keyframes rl-blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes rl-scrollcue {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track,
+  .grain,
+  .blink {
+    animation: none;
+  }
+}
