@@ -30,12 +30,12 @@ There is no Vitest config. Vitest reuses `vite.config.ts` and runs in the Node e
 
 ## Environment and deployment
 
-- **There is only one Supabase, and it is production:** `https://rootlandbase.syvursoft.com`, self-hosted with Coolify. `.env.local` (gitignored) sets `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`; `src/lib/supabase.ts` throws if either is missing. Orders placed or admin edits made under `npm run dev` are real.
+- **There is only one Supabase, and it is production:** `https://rootlandbase.syvursoft.com`, self-hosted with Coolify. `.env.local` (gitignored) sets `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` for `npm run dev`; production builds read the same two public values from `.env.production`, which is committed on purpose. `src/lib/supabase.ts` throws if either is missing. Orders placed or admin edits made under `npm run dev` are real.
 - `.env` (gitignored) holds the server secrets: service-role key, Postgres password, JWT secret, dashboard login. Never print them, never put them in a `VITE_` variable (Vite ships every `VITE_` value to the browser).
 - **No tool deploys migrations.** Run each file in `supabase/migrations/` once, in order, in Supabase Studio's SQL editor or through pg-meta `/pg/query` with the service key. Migrations start with `set role postgres` and end with `notify pgrst, 'reload schema'` so the API sees new functions.
 - `supabase/seed.sql` (settings rows, the 2 products, stock) already ran. `supabase/tests/store_checks.sql` checks row level security and the functions; run it inside `begin; … rollback;`.
 - **Auth** is email and password. Email confirmation is on and must stay on: staff roles only count for confirmed emails. Confirmation and password-reset emails need SMTP in Coolify (`GOTRUE_SMTP_*`), and `GOTRUE_SITE_URL` / `ADDITIONAL_REDIRECT_URLS` must allow the site and `http://localhost:3000/**`.
-- Hosting is Netlify: drag and drop `dist/`. `public/_redirects` provides the SPA fallback, and `vercel.json` holds the same rewrite for Vercel.
+- Hosting is Coolify, which builds the `Dockerfile` from GitHub: Node builds `dist/`, then nginx serves it on port 80 with the SPA fallback in `nginx.conf`. `public/_redirects` (Netlify) and `vercel.json` (Vercel) hold the same rewrite.
 - `LAUNCH-STEPS.md` is the owner's manual launch checklist.
 
 ## Architecture
